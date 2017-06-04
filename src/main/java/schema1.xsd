@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <xsd:complexType name="reading">
+      <xsd:sequence>
+         <xsd:element name="humidity" type="xsd:double"/>
+         <xsd:element name="pressure" type="xsd:double"/>
+         <xsd:element name="tempC" type="xsd:double"/>
+         <xsd:element name="tempF" type="xsd:double"/>
+         <xsd:element name="timestsamp" type="xsd:long"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="readingHistory">
+      <xsd:sequence>
+         <xsd:element name="avgHumidity" type="xsd:double"/>
+         <xsd:element name="avgPressure" type="xsd:double"/>
+         <xsd:element name="avgTempC" type="xsd:double"/>
+         <xsd:element name="avgTempF" type="xsd:double"/>
+         <xsd:element name="highHumidity" type="xsd:double"/>
+         <xsd:element name="highPressure" type="xsd:double"/>
+         <xsd:element name="highTempC" type="xsd:double"/>
+         <xsd:element name="highTempF" type="xsd:double"/>
+         <xsd:element name="lowHumidity" type="xsd:double"/>
+         <xsd:element name="lowPressure" type="xsd:double"/>
+         <xsd:element name="lowTempC" type="xsd:double"/>
+         <xsd:element name="lowTempF" type="xsd:double"/>
+         <xsd:element name="timestamp" type="xsd:long"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="reading" type="reading"/>
+   <xsd:element name="readingHistory" type="readingHistory"/>
+</xsd:schema>

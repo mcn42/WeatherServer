@@ -9,7 +9,7 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
-import eu.ondryaso.ssd1306.Display;
+//import org.mnilsen.displays.Display;
 import java.awt.Color;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -30,7 +30,7 @@ public class DisplayManager {
     private RefreshTask task = null;
 
     //private OLEDDisplay display = null;
-    private Display display = null;
+ //   private Display display = null;
     DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     private I2CBus bus = null;
     private I2CDevice device = null;
@@ -46,17 +46,17 @@ public class DisplayManager {
     }
 
     public DisplayManager(long refreshPeriodMillis, boolean showHistory) {
-        String msg = String.format("Starting Display Manager with refreshPeriod=%s and showHistory=%s", refreshPeriodMillis, showHistory);
-        Log.getLog().info(msg);
+//        String msg = String.format("Starting Display Manager with refreshPeriod=%s and showHistory=%s", refreshPeriodMillis, showHistory);
+//        Log.getLog().info(msg);
         this.refreshPeriodMillis = refreshPeriodMillis;
         this.showHistory = showHistory;
-        try {
-            bus =  I2CFactory.getInstance(I2CBus.BUS_1);
-            this.display = new Display(128, 64, GpioFactory.getInstance(),
-                    bus, 0x3c);
-        } catch (I2CFactory.UnsupportedBusNumberException | IOException | ReflectiveOperationException ex) {
-            Log.getLog().log(Level.SEVERE, "Display Startup error", ex);
-        }
+//        try {
+//            bus =  I2CFactory.getInstance(I2CBus.BUS_1);
+//            this.display = new Display(128, 64, GpioFactory.getInstance(),
+//                    bus, 0x3c);
+//        } catch (I2CFactory.UnsupportedBusNumberException | IOException | ReflectiveOperationException ex) {
+//            Log.getLog().log(Level.SEVERE, "Display Startup error", ex);
+//        }
         
     }
 
@@ -99,27 +99,27 @@ public class DisplayManager {
     }
 
     private void refreshDisplay() {
-        if (display != null) {
-            Log.getLog().log(Level.INFO, "Display mode {0}", this.currentState);
-            display.clear();
-
-            display.getGraphics().setColor(Color.WHITE);
-
-            display.getGraphics().setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-            display.getGraphics().drawString(df.format(new Date()), 10, 10);
-            //display.getGraphics().drawRect(0, 0, display.getWidth() - 1, display.getHeight() - 1);
-            // Deal with the image using AWT
-
-            display.displayImage();
-//           display.drawStringCentered(df.format(new Date()), Font.FONT_5X8, 10, true);
-//           try {
-//               display.update();
-//           } catch (IOException ex) {
-//               Log.getLog().log(Level.SEVERE, "Display update failure", ex);
-//           }
-        } else {
-            Log.getLog().warning("Display ref was NULL");
-        }
+//        if (display != null) {
+//            Log.getLog().log(Level.INFO, "Display mode {0}", this.currentState);
+//            display.clear();
+//
+//            display.getGraphics().setColor(Color.WHITE);
+//
+//            display.getGraphics().setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+//            display.getGraphics().drawString(df.format(new Date()), 10, 10);
+//            //display.getGraphics().drawRect(0, 0, display.getWidth() - 1, display.getHeight() - 1);
+//            // Deal with the image using AWT
+//
+//            display.displayImage();
+////           display.drawStringCentered(df.format(new Date()), Font.FONT_5X8, 10, true);
+////           try {
+////               display.update();
+////           } catch (IOException ex) {
+////               Log.getLog().log(Level.SEVERE, "Display update failure", ex);
+////           }
+//        } else {
+//            Log.getLog().warning("Display ref was NULL");
+//        }
     }
 
     public boolean isShowHistory() {

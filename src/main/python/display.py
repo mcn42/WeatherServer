@@ -53,7 +53,7 @@ LINE4_OFFSET = 48
 # SPI_DEVICE = 0
 
 # 128x32 display with hardware I2C:
-disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
+disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c_bus=1)
 
 # 128x64 display with hardware I2C:
 # disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
@@ -105,13 +105,9 @@ x = 0
 
 
 # Load default font.
-font = ImageFont.load_default()
-#font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 14)
+#font = ImageFont.load_default()
+font = ImageFont.truetype("DejaVuSansCondensed-Bold.ttf", 14)
 
-# Alternatively load a TTF font.  Make sure the .ttf font file is in the same directory as the python script!
-# Some other nice fonts to try: http://www.dafont.com/bitmap.php
-# font = ImageFont.truetype('Minecraftia.ttf', 8)
-sleep(30)
 print('Starting display process...')
 while True:
 

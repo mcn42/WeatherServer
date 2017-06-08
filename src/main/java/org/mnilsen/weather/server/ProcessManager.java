@@ -29,7 +29,7 @@ public class ProcessManager {
         if (!appDir.endsWith("/")) {
             appDir = appDir + "/";
         }
-        command.add("sudo");
+        command.add("python");
         command.add(appDir + scriptName);
 
         executor = new ProcessBuilder(command);

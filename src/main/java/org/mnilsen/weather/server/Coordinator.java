@@ -32,6 +32,7 @@ public class Coordinator {
     private MongoDS database = null;
     private HistoryManager historyMgr = null;
     private WebServer webServer = new WebServer();
+    private ProcessManager display = new ProcessManager();
     
     private final AtomicReference<Reading> currentReading;
     private final AtomicReference<ReadingHistory> currentHistory;
@@ -61,12 +62,14 @@ public class Coordinator {
     {
         this.sensorMgr.start();
         //this.displayMgr.start();
+        this.display.start();
         this.webServer.start();
     }
     
     public void stop()
     {
         //this.displayMgr.stop();
+        this.display.stop();
         this.sensorMgr.stop();
         this.webServer.stop();
     }

@@ -3,8 +3,6 @@ package org.mnilsen.weather.server;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.servlet.ServletContextEvent;
 
 /**
  * Hello world!
@@ -17,6 +15,14 @@ public class App
         App app = new App();
         String configFilePath =  args.length > 0?args[0]:null;
         app.initialize(configFilePath);
+        
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            @Override
+//            public void run() {
+//                if(app != null) app.shutdown();
+//            }
+//            
+//        });
     }
     
     private static final AtomicBoolean initialized = new AtomicBoolean(false);
@@ -50,7 +56,7 @@ public class App
     }
 
     
-    public void shutdown(ServletContextEvent sce) {
+    public void shutdown() {
         if (Coordinator.getInstance() != null)
           Coordinator.getInstance().stop();
     }

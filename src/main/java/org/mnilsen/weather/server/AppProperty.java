@@ -18,7 +18,9 @@ public enum AppProperty {
     DISPLAY_ENABLED("true"),
     DISPLAY_HISTORY("true"),
     LOG_DIRECTORY("/home/pi/weather/logs"),
-    HISTORY_LENGTH_DAYS("30");
+    HISTORY_LENGTH_DAYS("30"),
+    DISPLAY_SCRIPT_NAME("display.py"),
+    APPLICATION_HOME_DIR("/home/pi/weather");
     
     private final String defaultValue;
     

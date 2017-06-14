@@ -20,6 +20,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import org.mnilsen.weather.server.model.Reading;
+import org.mnilsen.weather.server.model.ReadingHistory;
 
 /**
  *
@@ -73,6 +74,20 @@ public class Utils {
     }
     
     public static String getReadingJson(Reading r)
+    {
+        String res= "";
+        StringWriter writer = new StringWriter();
+        try {
+            marshaller.marshal(r, writer);
+            res = writer.toString();
+        } catch (JAXBException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return res;
+    }
+    
+    public static String getHistoryJson(ReadingHistory r)
     {
         String res= "";
         StringWriter writer = new StringWriter();

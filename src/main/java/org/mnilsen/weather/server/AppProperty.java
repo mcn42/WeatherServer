@@ -20,7 +20,13 @@ public enum AppProperty {
     LOG_DIRECTORY("/home/pi/weather/logs"),
     HISTORY_LENGTH_DAYS("30"),
     DISPLAY_SCRIPT_NAME("display.py"),
-    APPLICATION_HOME_DIR("/home/pi/weather");
+    APPLICATION_HOME_DIR("/home/pi/weather"),
+    AWS_CLIENT_ID("weather-station-1"),
+    AWS_CLIENT_ENDPOINT("a2qgyw4trswo49.iot.us-east-1.amazonaws.com"),
+    AWS_CERT_FILE("/home/pi/aws/WeatherStation1.cert.pem"),
+    AWS_PK_FILE("/home/pi/aws/WeatherStation1.private.key"),
+    AWS_UPDATE_TOPIC("$aws/things/WeatherStation1/shadow/update"),
+    AWS_UPDATE_PERIOD("300000");
     
     private final String defaultValue;
     

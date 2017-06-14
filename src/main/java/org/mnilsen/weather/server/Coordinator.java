@@ -6,6 +6,7 @@
 package org.mnilsen.weather.server;
 
 import java.util.concurrent.atomic.AtomicReference;
+import org.mnilsen.weather.aws.AwsIotClient;
 import org.mnilsen.weather.server.model.Reading;
 import org.mnilsen.weather.server.model.ReadingHistory;
 
@@ -33,7 +34,7 @@ public class Coordinator {
     private HistoryManager historyMgr = null;
     private WebServer webServer = new WebServer();
     private ProcessManager display = new ProcessManager();
-    
+    private AwsIotClient awsMgr = new AwsIotClient();
     private final AtomicReference<Reading> currentReading;
     private final AtomicReference<ReadingHistory> currentHistory;
     private boolean saveToMongo = false;
@@ -45,6 +46,7 @@ public class Coordinator {
         this.database = new MongoDS();
         this.sensorMgr = new SensorManager(diplayRefreshMillis);
         this.historyMgr = new HistoryManager(historyLengthDays);
+        
         //this.displayMgr = new DisplayManager(0, showHistory);
     }
     
@@ -64,11 +66,13 @@ public class Coordinator {
         //this.displayMgr.start();
         this.display.start();
         this.webServer.start();
+        this.awsMgr.start();
     }
     
     public void stop()
     {
         //this.displayMgr.stop();
+        this.awsMgr.stop();
         this.display.stop();
         this.sensorMgr.stop();
         this.webServer.stop();

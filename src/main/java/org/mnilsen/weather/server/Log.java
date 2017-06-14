@@ -2,6 +2,7 @@ package org.mnilsen.weather.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ public class Log {
     }
 
     private static void configure() {
-        log.setLevel(Level.ALL);
+        log.setLevel(Level.FINEST);
         try {
             String path = Utils.getAppProperties().get(AppProperty.LOG_DIRECTORY);
             File dir = new File(path);
@@ -32,7 +33,7 @@ public class Log {
                 log.info(String.format("Creating Log directory at %s", dir.getCanonicalPath()));
                 dir.mkdirs();
             }
-            FileHandler fh = new FileHandler(path + "/weather_server_%g.log", 100000, 6, true);
+            FileHandler fh = new FileHandler(path + "/weather_server_%g.log", 200000, 6, false);
             fh.setFormatter(new SimpleFormatter());
             fh.setLevel(Level.ALL);
             log.addHandler(fh);
@@ -44,7 +45,7 @@ public class Log {
         try {
             String path = Utils.getAppProperties().get(AppProperty.LOG_DIRECTORY);
 
-            FileHandler fh = new FileHandler(path + "/weather_data_%g.log", 100000, 6, true);
+            FileHandler fh = new FileHandler(path + "/weather_data_%g.log", 200000, 6, true);
             fh.setFormatter(new SimpleFormatter());
             fh.setLevel(Level.ALL);
             dataLog.addHandler(fh);

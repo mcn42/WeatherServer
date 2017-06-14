@@ -26,6 +26,8 @@ public enum AppProperty {
     AWS_CERT_FILE("/home/pi/aws/WeatherStation1.cert.pem"),
     AWS_PK_FILE("/home/pi/aws/WeatherStation1.private.key"),
     AWS_UPDATE_TOPIC("$aws/things/WeatherStation1/shadow/update"),
+    AWS_UPDATE_ACCEPTED_TOPIC("$aws/things/WeatherStation1/shadow/update/accepted"),
+    AWS_UPDATE_REJECTED_TOPIC("$aws/things/WeatherStation1/shadow/update/rejected"),
     AWS_UPDATE_PERIOD("300000");
     
     private final String defaultValue;

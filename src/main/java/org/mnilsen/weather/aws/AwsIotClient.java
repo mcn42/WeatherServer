@@ -9,11 +9,11 @@ import com.amazonaws.services.iot.client.AWSIotException;
 import com.amazonaws.services.iot.client.AWSIotMessage;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
 import com.amazonaws.services.iot.client.AWSIotQos;
+import com.amazonaws.services.iot.client.AWSIotTopic;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil;
 import com.amazonaws.services.iot.client.sample.sampleUtil.SampleUtil.KeyStorePasswordPair;
 import java.util.TimerTask;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.mnilsen.weather.server.AppProperty;
 import org.mnilsen.weather.server.Coordinator;
 import org.mnilsen.weather.server.Log;
@@ -32,7 +32,9 @@ public class AwsIotClient {
     private final String certificateFile = Utils.getAppProperties().get(AppProperty.AWS_CERT_FILE);
     private final String privateKeyFile = Utils.getAppProperties().get(AppProperty.AWS_PK_FILE);
     private final String updateTopic = Utils.getAppProperties().get(AppProperty.AWS_UPDATE_TOPIC);
-    
+    private final String updateAccTopic = Utils.getAppProperties().get(AppProperty.AWS_UPDATE_ACCEPTED_TOPIC);
+    private final String updateRejTopic = Utils.getAppProperties().get(AppProperty.AWS_UPDATE_REJECTED_TOPIC);
+
     private AWSIotMqttClient client = null;
     private UpdateTask updateTask = null;
 
@@ -45,17 +47,27 @@ public class AwsIotClient {
         client = new AWSIotMqttClient(clientEndpoint, clientId, pair.keyStore, pair.keyPassword);
         Long period = Utils.getAppProperties().getLong(AppProperty.AWS_UPDATE_PERIOD);
         try {
-            // optional parameters can be set before connect()
+            Log.getLog().info(String.format("Connecting to AWS endpoint %s", this.clientEndpoint));
             client.connect();
+            Log.getLog().info(String.format("Connected to AWS endpoint: %s", this.client.getConnectionStatus()));
+            
+            MyTopic mt = new MyTopic(this.updateAccTopic,AWSIotQos.QOS0);
+            client.subscribe(mt);
+            Log.getLog().info(String.format("Subscribed to AWS topic: %s", this.updateAccTopic));
+            mt = new MyTopic(this.updateRejTopic,AWSIotQos.QOS0);
+            client.subscribe(mt);
+            Log.getLog().info(String.format("Subscribed to AWS topic: %s", this.updateRejTopic));
+            
             this.updateTask = new UpdateTask();
             Utils.getAppTimer().schedule(updateTask, 31000L, period);
-
+            Log.getLog().info(String.format("Started Update Task with period %s", period));
         } catch (AWSIotException ex) {
             Log.getLog().log(Level.SEVERE, "AWS Client connect error", ex);
         }
     }
 
     public void stop() {
+        Log.getLog().info("Stopping AWS connection");
         if (client != null) {
             try {
                 client.disconnect();
@@ -66,18 +78,22 @@ public class AwsIotClient {
     }
 
     private void sendUpdate() {
+        Log.getLog().info(String.format("Sending update to AWS topic '%s'", this.updateTopic));
         Reading current = Coordinator.getInstance().getCurrentReading();
         ReadingHistory history = Coordinator.getInstance().getCurrentHistory();
-        String currStr = Utils.getReadingJson(current);
-        String histStr = Utils.getHistoryJson(history);
+        String currStr = current == null ? "{}" : Utils.getReadingJson(current);
+        String histStr = history == null ? "{}" : Utils.getHistoryJson(history);
         
+         
+
         StringBuilder sb = new StringBuilder();
-        
-        sb.append(String.format("{clientId: %s, current: %s, histroy: %s}",clientId,currStr,histStr));
-        
-        WeatherMessage wm = new WeatherMessage(this.updateTopic,AWSIotQos.QOS0,sb.toString());
+
+        sb.append(String.format("{\"state\": {\"reported\": {\"current\": %s, \"history\": %s}}}", currStr, histStr));
+        //Log.getLog().log(Level.INFO, "Sending JSON: {0}", sb.toString());
+        WeatherMessage wm = new WeatherMessage(this.updateTopic, AWSIotQos.QOS0, sb.toString());
         try {
             this.client.publish(wm);
+            Log.getLog().info("Update sent to AWS");
         } catch (AWSIotException ex) {
             Log.getLog().log(Level.SEVERE, "AWS Client publish update error", ex);
         }
@@ -112,5 +128,17 @@ public class AwsIotClient {
             sendUpdate();
         }
 
+    }
+
+    public class MyTopic extends AWSIotTopic {
+
+        public MyTopic(String topic, AWSIotQos qos) {
+            super(topic, qos);
+        }
+
+        @Override
+        public void onMessage(AWSIotMessage message) {
+            Log.getLog().log(Level.INFO, String.format("AWS Message received- topic: %s, payload: %s",message.getTopic(),message.getStringPayload()));
+        }
     }
 }

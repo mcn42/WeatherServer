@@ -46,7 +46,7 @@ public class Coordinator {
         this.database = new MongoDS();
         this.sensorMgr = new SensorManager(diplayRefreshMillis);
         this.historyMgr = new HistoryManager(historyLengthDays);
-        
+        Log.getLog().severe("Coordinator created");
         //this.displayMgr = new DisplayManager(0, showHistory);
     }
     
@@ -57,6 +57,7 @@ public class Coordinator {
         //this.database = new MongoDS();
         this.sensorMgr = new SensorManager(diplayRefreshMillis);
         this.historyMgr = new HistoryManager(historyLengthDays);
+        Log.getLog().severe("Coordinator created");
         //this.displayMgr = new DisplayManager(diplayRefreshMillis, showHistory);
     }
     
@@ -65,8 +66,10 @@ public class Coordinator {
         this.sensorMgr.start();
         //this.displayMgr.start();
         this.display.start();
-        this.webServer.start();
         this.awsMgr.start();
+        this.webServer.start();
+        
+        
     }
     
     public void stop()

@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.mnilsen.weather.server.model.Reading;
 import org.mnilsen.weather.server.model.ReadingHistory;
 
@@ -39,8 +40,11 @@ public class Utils {
         appProperties = new AppPropertyManager(configPath);
         appDirectory = configPath;
         try {
-            jaxb = JAXBContext.newInstance("org.mnilsen.weather.server.model",Utils.class.getClassLoader());
+            jaxb = JAXBContext.newInstance(Reading.class,ReadingHistory.class);
             marshaller = jaxb.createMarshaller();
+            marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/json");
+            marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
+
         } catch (JAXBException ex) {
             Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, "A JAXB init error occurred", ex);
         }

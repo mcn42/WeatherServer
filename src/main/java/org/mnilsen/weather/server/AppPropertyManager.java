@@ -21,11 +21,13 @@ public class AppPropertyManager {
 
     private final Map<AppProperty, String> props = new HashMap<>();
     private final String filePath;
+    boolean propertiesMissing = false;
 
     public AppPropertyManager(String filePath) {
         this.filePath = filePath;
         this.loadProperties();
-        //this.saveProperties();
+        if(this.propertiesMissing)
+          this.saveProperties();
     }
 
     public String get(AppProperty propId) {
@@ -76,6 +78,7 @@ public class AppPropertyManager {
                 if (val == null) {
                     val = ap.getDefaultValue();
                     Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, String.format("Could not load property '%s', defaulting to '%s'", ap, val));
+                    this.propertiesMissing = true;
                 }
                 this.props.put(ap, val);
             }

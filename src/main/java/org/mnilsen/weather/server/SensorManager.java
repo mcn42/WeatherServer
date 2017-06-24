@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.mnilsen.weather.sensor.Bme280Device;
 import org.mnilsen.weather.server.model.Reading;
 

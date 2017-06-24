@@ -174,7 +174,7 @@ public class Bme280Device {
 //        System.out.printf("Pressure : %.2f hPa %n", pressure);
 //        System.out.printf("Relative Humidity : %.2f %% RH %n", humidity);
 //        System.out.println();
-        reading = new Reading(System.currentTimeMillis(),humidity, cTemp,fTemp,pressure);
+        reading = new Reading(System.currentTimeMillis(),humidity, cTemp,fTemp,pressure,false);
         
         return reading;
     }

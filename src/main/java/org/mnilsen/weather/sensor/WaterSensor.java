@@ -25,7 +25,10 @@ public class WaterSensor {
     private final long monitorPeriod = Utils.getAppProperties().getLong(AppProperty.WATER_MONITOR_PERIOD);
     private GrovePi pi = null;
     private GroveDigitalIn sensor = null;
-    MonitorTask task = null;
+    private MonitorTask task = null;
+    private boolean lastReading;
+    private long lastUpdate = -1;
+    
     
     public WaterSensor() {
         
@@ -53,17 +56,25 @@ public class WaterSensor {
     
     private void readSensor() {
         try {
-            boolean sense = this.sensor.get();
-            Log.getLog().info(String.format("Water Sensor reading: '%s'", sense));
-
+            this.lastReading = this.sensor.get();
+            Log.getLog().info(String.format("Water Sensor reading: '%s'", this.lastReading));
+            this.lastUpdate = System.currentTimeMillis();
             //  HIGH is dry!
-            if (!sense) {
+            if (!this.lastReading) {
                 //  TODO send alert
             }
             
         } catch (IOException | InterruptedException ex) {
             Log.getLog().log(Level.SEVERE, String.format("Water Sensor read error"), ex);
         }
+    }
+
+    public boolean getLastReading() {
+        return lastReading;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
     }
     
     class MonitorTask extends TimerTask {

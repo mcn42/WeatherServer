@@ -5,18 +5,11 @@
  */
 package org.mnilsen.weather.server;
 
-import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
-import com.pi4j.io.i2c.I2CFactory;
-//import org.mnilsen.displays.Display;
-import java.awt.Color;
-import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
 
 /**
  *

@@ -6,7 +6,6 @@
 package org.mnilsen.weather.server.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import org.mnilsen.weather.server.Utils;
 
 /**
  *
@@ -19,16 +18,18 @@ public class Reading {
     private double tempC;
     private double tempF;
     private double pressure;
+    private boolean waterPresent;
 
     public Reading() {
     }
 
-    public Reading(long timestamp,double humidity, double tempC, double tempF, double pressure) {
+    public Reading(long timestamp,double humidity, double tempC, double tempF, double pressure,boolean waterPresent) {
         this.timestamp = timestamp;
         this.humidity = humidity;
         this.tempC = tempC;
         this.tempF = tempF;
         this.pressure = pressure;
+        this.waterPresent = waterPresent;
     }
 
     public long getTimestamp() {
@@ -71,6 +72,14 @@ public class Reading {
         this.pressure = pressure;
     }
 
+    public boolean isWaterPresent() {
+        return waterPresent;
+    }
+
+    public void setWaterPresent(boolean waterPresent) {
+        this.waterPresent = waterPresent;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -98,7 +107,9 @@ public class Reading {
 
     @Override
     public String toString() {
-        return "Reading{" + "tstamp=" + Utils.getTimestampString(timestamp) + ", humidity=" + humidity + ", tempC=" + tempC + ", tempF=" + tempF + ", pressure=" + pressure + '}';
+        return "Reading{" + "timestamp=" + timestamp + ", humidity=" + humidity + ", tempC=" + tempC + ", tempF=" + tempF + ", pressure=" + pressure + ", waterPresent=" + waterPresent + '}';
     }
+
+    
     
 }

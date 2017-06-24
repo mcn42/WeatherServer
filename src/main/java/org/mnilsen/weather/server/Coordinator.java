@@ -7,6 +7,7 @@ package org.mnilsen.weather.server;
 
 import java.util.concurrent.atomic.AtomicReference;
 import org.mnilsen.weather.aws.AwsIotClient;
+import org.mnilsen.weather.sensor.WaterSensor;
 import org.mnilsen.weather.server.model.Reading;
 import org.mnilsen.weather.server.model.ReadingHistory;
 
@@ -35,6 +36,7 @@ public class Coordinator {
     private WebServer webServer = new WebServer();
     private ProcessManager display = new ProcessManager();
     private AwsIotClient awsMgr = new AwsIotClient();
+    private WaterSensor water = new WaterSensor();
     private final AtomicReference<Reading> currentReading;
     private final AtomicReference<ReadingHistory> currentHistory;
     private boolean saveToMongo = false;
@@ -65,6 +67,7 @@ public class Coordinator {
     {
         this.sensorMgr.start();
         //this.displayMgr.start();
+        this.water.startMonitor();
         this.display.start();
         this.awsMgr.start();
         this.webServer.start();
@@ -77,6 +80,7 @@ public class Coordinator {
         //this.displayMgr.stop();
         this.awsMgr.stop();
         this.display.stop();
+        this.water.stopMonitor();
         this.sensorMgr.stop();
         this.webServer.stop();
     }

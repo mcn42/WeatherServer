@@ -28,7 +28,9 @@ public enum AppProperty {
     AWS_UPDATE_TOPIC("$aws/things/WeatherStation1/shadow/update"),
     AWS_UPDATE_ACCEPTED_TOPIC("$aws/things/WeatherStation1/shadow/update/accepted"),
     AWS_UPDATE_REJECTED_TOPIC("$aws/things/WeatherStation1/shadow/update/rejected"),
-    AWS_UPDATE_PERIOD("300000");
+    AWS_UPDATE_PERIOD("300000"),
+    WATER_SENSOR_PIN("4"), 
+    WATER_MONITOR_PERIOD("300000");
     
     private final String defaultValue;
     

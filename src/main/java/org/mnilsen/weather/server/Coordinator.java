@@ -87,7 +87,7 @@ public class Coordinator {
     
     public void acceptReading(Reading r)
     {
-        r.setWaterPresent(this.water.getLastReading());
+        r.setWaterPresent(!this.water.getLastReading());
         this.currentReading.lazySet(r);
         this.historyMgr.addReading(r);
         if(this.saveToMongo)

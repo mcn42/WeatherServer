@@ -114,6 +114,10 @@ public class Coordinator {
     public boolean isSaveToMongo() {
         return saveToMongo;
     }
+
+    public AwsIotClient getAwsMgr() {
+        return awsMgr;
+    }
     
     
 }

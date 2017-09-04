@@ -6,12 +6,15 @@
 package org.mnilsen.weather.sensor;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import org.iot.raspberry.grovepi.GroveDigitalIn;
 import org.iot.raspberry.grovepi.GrovePi;
 import org.iot.raspberry.grovepi.pi4j.GrovePi4J;
 import org.mnilsen.weather.server.AppProperty;
+import org.mnilsen.weather.server.Coordinator;
 import org.mnilsen.weather.server.Log;
 import org.mnilsen.weather.server.Utils;
 
@@ -29,6 +32,8 @@ public class WaterSensor {
     private boolean lastReading;
     private long lastUpdate = -1;
     
+    private Long lastAlert = null;
+    private Long firstAlert = null;
     
     public WaterSensor() {
         
@@ -62,6 +67,9 @@ public class WaterSensor {
             //  HIGH is dry!
             if (!this.lastReading) {
                 //  TODO send alert
+            } else { 
+                this.lastAlert = null;
+                this.firstAlert = null;
             }
             
         } catch (IOException | InterruptedException ex) {
@@ -77,6 +85,27 @@ public class WaterSensor {
         return lastUpdate;
     }
     
+    private static DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    private void sendAlert()
+    {   
+        if(this.firstAlert == null) this.firstAlert =  System.currentTimeMillis();  
+        String since = df.format(new Date(this.firstAlert));
+        if(this.lastAlert == null) {
+            this.lastAlert = System.currentTimeMillis();
+        } else {
+            long period = System.currentTimeMillis() - this.lastAlert;
+            if(period < Utils.getAppProperties().getLong(AppProperty.ALERT_SUPRESS_PERIOD))
+            {
+                Log.getLog().info(String.format("Water present message supressed, last sent %s",df.format(new Date(this.lastAlert))));
+                return;
+            } else this.lastAlert = System.currentTimeMillis();
+        }
+        String msg = String.format("WATER PRESENT! Since %s", since);
+        Coordinator.getInstance().getAwsMgr().sendSMSMessage(msg, "+19086564206");
+        
+        Log.getLog().info(String.format("Water present message sent, first sent %s",since));
+    }
+    
     class MonitorTask extends TimerTask {
         
         @Override
@@ -85,4 +114,6 @@ public class WaterSensor {
         }
         
     }
+    
+    
 }

@@ -29,8 +29,8 @@ public enum AppProperty {
     AWS_UPDATE_ACCEPTED_TOPIC("$aws/things/WeatherStation1/shadow/update/accepted"),
     AWS_UPDATE_REJECTED_TOPIC("$aws/things/WeatherStation1/shadow/update/rejected"),
     AWS_UPDATE_PERIOD("300000"),
-    AWS_ACCESS_KEY("057YCWB3WW96S7YK15R2"),
-    AWS_SECRET_KEY("bhoP0POveY3Z3E5EPq4OXXA2wmPIgFIs0a5iFLFx"),
+    AWS_ACCESS_KEY("YOURKEYHERE"),
+    AWS_SECRET_KEY("YOURKEYHERE"),
     WATER_SENSOR_PIN("4"), 
     WATER_MONITOR_PERIOD("300000"),
     ALERT_SUPRESS_PERIOD(Long.toString(60 * 60 * 1000));
